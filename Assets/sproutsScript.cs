@@ -52,7 +52,8 @@ public class sproutsScript : MonoBehaviour
     }
 
     //internals
-    private static bool _isUsingThreads;
+    static bool _isUsingThreads;
+    bool _bootingUp = true;
     static int _moduleIdCounter = 1;
     int _moduleID = 0;
 
@@ -129,7 +130,11 @@ public class sproutsScript : MonoBehaviour
 
     private IEnumerator Calculate(bool bot)
     {
-        yield return new WaitForSecondsRealtime(Rnd.Range(0, 3f));
+        if (_bootingUp)
+        {
+            yield return new WaitForSecondsRealtime(Rnd.Range(0, 3f));
+            _bootingUp = false;
+        }
         yield return new WaitWhile(() => _isUsingThreads);
         _isUsingThreads = true;
         if (bot)
